@@ -4,18 +4,20 @@ import { useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { login, getUser } from "../api/api"
 import useAuth from "../hooks/useAuth"
+import { useNavigation } from "@react-navigation/native"
 
 const Login = () => {
 
     const [username, setUsername] = useState('')
     const [password, setPassowrd] = useState('')
     const {user, setUser} = useAuth()
+    const navigator = useNavigation()
 
     const {mutate: getUserMutation} = useMutation({
         mutationFn: data => getUser(data),
         onSuccess: res => {
-            console.log(res.data)
             setUser({ ...user, ...res.data })
+            // navigator.navigate('Welcome')
         },
         onError: err => console.log(err),
     })
@@ -31,6 +33,8 @@ const Login = () => {
 
     const handleLogin = () => {
         loginMutation({ username, password })
+        setUsername('')
+        setPassowrd('')
     }
 
   return (
@@ -49,6 +53,10 @@ const Login = () => {
             setter={setPassowrd}
         />
         <Button onPress={handleLogin} title="Login"/>
+        <View style={styles.link}>
+            <Text>Does not have an account yet?</Text>
+            <Button onPress={() => {navigator.navigate('Signup')}} title="Create Account"/>
+        </View>
     </View>
   )
 }
@@ -67,5 +75,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 30,
         marginBottom: 35,
+    },
+    link: {
+        marginVertical: 20,
     }
-  });
+});
