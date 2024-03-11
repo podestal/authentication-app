@@ -16,8 +16,7 @@ const Login = () => {
     const {mutate: getUserMutation} = useMutation({
         mutationFn: data => getUser(data),
         onSuccess: res => {
-            setUser({ ...user, ...res.data })
-            // navigator.navigate('Welcome')
+            setUser({ ...res.data})
         },
         onError: err => console.log(err),
     })
@@ -25,8 +24,8 @@ const Login = () => {
     const {mutate: loginMutation} = useMutation({
         mutationFn: (data) => login(data),
         onSuccess: res => {
-            setUser(res.data)
-            getUserMutation(res.data.access)
+            setUser({ ...res.data, isAuthenticated: true })
+            // getUserMutation(res.data.access)
         },
         onError: err => console.log(err)
     })
@@ -39,7 +38,6 @@ const Login = () => {
 
   return (
     <View style={styles.container}>
-        {console.log('user:', user)}
         <Text style={styles.title}>Login</Text>
         <Input 
             label='Username'
