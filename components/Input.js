@@ -1,6 +1,6 @@
 import { View, Text, TextInput, StyleSheet } from "react-native"
 
-const Input = ({ label, type, secure }) => {
+const Input = ({ label, type, secure, value, setter }) => {
   return (
     <View style={styles.container}>
         <Text style={styles.label}>{label}</Text>
@@ -8,6 +8,8 @@ const Input = ({ label, type, secure }) => {
             style={styles.input}
             keyboardType={type ? type : 'default'}
             secureTextEntry={secure}
+            value={value}
+            onChangeText={ inputValue => setter(inputValue)}
         />
     </View>
   )
