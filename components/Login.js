@@ -1,37 +1,27 @@
 import { Text, View, ScrollView, StyleSheet, Button, Alert } from "react-native"
 import Input from "./Input"
-import { createUser } from "../api/api"
-import { useMutation } from "@tanstack/react-query"
 import { useState } from "react"
+import { useMutation } from "@tanstack/react-query"
+import { login } from "../api/api"
 
-const CreateUser = () => {
+const Login = () => {
 
-    const [email, setEmail] = useState('')
     const [username, setUsername] = useState('')
     const [password, setPassowrd] = useState('')
 
-    const {mutate: createUserMutation} = useMutation({
-        mutationFn: data => createUser(data),
-        onSuccess: res => console.log(res),
-        onError: err => console.log(err),
+    const {mutate: loginMutation} = useMutation({
+        mutationFn: (data) => login(data),
+        onSuccess: res => console.log(res.data),
+        onError: err => console.log(err)
     })
 
-    const handleSignup = () => {
-        createUserMutation({ email, username, password })
-        setEmail('')
-        setUsername('')
-        setPassowrd('')
+    const handleLogin = () => {
+        loginMutation({ username, password })
     }
 
   return (
     <View style={styles.container}>
-        <Text style={styles.title}>Sign Up</Text>
-        <Input 
-            label='Email'
-            type='email-address' 
-            value={email}
-            setter={setEmail}
-        />
+        <Text style={styles.title}>Login</Text>
         <Input 
             label='Username'
             value={username}
@@ -43,12 +33,12 @@ const CreateUser = () => {
             value={password}
             setter={setPassowrd}
         />
-        <Button onPress={handleSignup} title="Signup"/>
+        <Button onPress={handleLogin} title="Login"/>
     </View>
   )
 }
 
-export default CreateUser
+export default Login
 
 
 const styles = StyleSheet.create({
@@ -63,4 +53,4 @@ const styles = StyleSheet.create({
         fontSize: 30,
         marginBottom: 35,
     }
-});
+  });

@@ -10,6 +10,7 @@ const Input = ({ label, type, secure, value, setter }) => {
             secureTextEntry={secure}
             value={value}
             onChangeText={ inputValue => setter(inputValue)}
+            autoCapitalize='none'
         />
     </View>
   )
