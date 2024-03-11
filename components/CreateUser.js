@@ -1,7 +1,15 @@
 import { Text, View, ScrollView, StyleSheet, Button, Alert } from "react-native"
 import Input from "./Input"
+import { createUser } from "../api/api"
+import { useMutation } from "@tanstack/react-query"
 
 const CreateUser = () => {
+
+    const {mutate: createUserMutation} = useMutation({
+        mutationFn: data => createUser(data),
+        onSuccess: res => console.log(res),
+        onError: err => console.log(err),
+    })
 
     const handleSignup = () => {
         Alert.alert('working!!!')
