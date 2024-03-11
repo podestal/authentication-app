@@ -2,16 +2,30 @@ import { Text, View, ScrollView, StyleSheet, Button, Alert } from "react-native"
 import Input from "./Input"
 import { useState } from "react"
 import { useMutation } from "@tanstack/react-query"
-import { login } from "../api/api"
+import { login, getUser } from "../api/api"
+import useAuth from "../hooks/useAuth"
 
 const Login = () => {
 
     const [username, setUsername] = useState('')
     const [password, setPassowrd] = useState('')
+    const {user, setUser} = useAuth()
+
+    const {mutate: getUserMutation} = useMutation({
+        mutationFn: data => getUser(data),
+        onSuccess: res => {
+            console.log(res.data)
+            setUser({ ...user, ...res.data })
+        },
+        onError: err => console.log(err),
+    })
 
     const {mutate: loginMutation} = useMutation({
         mutationFn: (data) => login(data),
-        onSuccess: res => console.log(res.data),
+        onSuccess: res => {
+            setUser(res.data)
+            getUserMutation(res.data.access)
+        },
         onError: err => console.log(err)
     })
 
@@ -21,6 +35,7 @@ const Login = () => {
 
   return (
     <View style={styles.container}>
+        {console.log('user:', user)}
         <Text style={styles.title}>Login</Text>
         <Input 
             label='Username'
